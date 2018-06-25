@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Cat Clicker</title>
+</head>
+<body>
+  <img
+    id="hero-image"
+    src="https://lh3.ggpht.com/nlI91wYNCrjjNy5f-S3CmVehIBM4cprx-JFWOztLk7vFlhYuFR6YnxcT446AvxYg4Ab7M1Fy0twaOCWYcUk=s0#w=640&h=426"
+    alt="very cute cat"
+    width="320px"
+    height="auto"
+  >
+  <div id="counter-displayer">Click: 0</div>
+
+  <script>
+    var counter = 0;
+
+    document
+      .getElementById('hero-image')
+      .addEventListener('click', function() {
+        var displayer = document.getElementById('counter-displayer');
+        var label = counter++ > 1 
+          ? 'Clicks: '
+          : 'Click: '; 
+        displayer.textContent = label + counter;
+        console.log('clcik', counter);
+      });
+
+  </script>
+</body>
+</html>
