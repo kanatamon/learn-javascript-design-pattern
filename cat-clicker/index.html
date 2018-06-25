@@ -42,17 +42,18 @@
       return `
         <h3>${cat.name}</h3>
         <img
-          class="image"
+          class="trigger"
           src="${cat.imageUrl}"
           alt="${cat.name}"
           width="320px"
           height="auto"
         >
-        <div id="counter">${label}</div>
+        <div class="counter">${label}</div>
       `;
     }
 
     var appContainerEl = document.getElementById('app-container');
+    
     // Initialize `cat-clicker` components
     catsStore.forEach((cat) => {
       // Create particular `cat-clicker` string
@@ -66,19 +67,15 @@
 
       // Add created particular `cat-clicker` to `app-container`
       appContainerEl.appendChild(componentContainerEl);
+
+      var trigger = componentContainerEl.getElementsByClassName('trigger')[0];
+      var counter = componentContainerEl.getElementsByClassName('counter')[0];
+      // Add event listener for `click`
+      trigger.addEventListener('click', () => {
+        cat.counter++;
+        counter.textContent = generateCounterLabel(cat.counter);
+      });
     });
-
-    // document
-    //   .getElementById('hero-image')
-    //   .addEventListener('click', function() {
-    //     var displayer = document.getElementById('counter-displayer');
-    //     var label = counter++ > 1 
-    //       ? 'Clicks: '
-    //       : 'Click: '; 
-    //     displayer.textContent = label + counter;
-    //     console.log('clcik', counter);
-    //   });
-
   </script>
 </body>
 </html>
