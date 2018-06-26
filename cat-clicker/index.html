@@ -102,7 +102,7 @@
 
     updateDisplayArea();
 
-    catsStore.forEach(cat => {
+    catsStore.forEach((cat, index) => {
       var catTagNameElString = createCatTagName(cat);
       var id = generateID(cat.name, 'item');
       var componentContainerEl = document.createElement('li');
@@ -110,6 +110,11 @@
       componentContainerEl.innerHTML = catTagNameElString;
 
       listEl.appendChild(componentContainerEl);
+
+      componentContainerEl.addEventListener('click', () => {
+        selectedCatStoreIndex = index;
+        updateDisplayArea();
+      });
     });
 
   </script>
