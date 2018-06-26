@@ -44,11 +44,6 @@
       return label + ': ' + counter;
     }
 
-    function generateID(name, componentName) {
-      var id = name.replace(/\s+/,'-');
-      return `${id}-${componentName}`; 
-    }
-
     function createCatClickerComponent(cat) {
       var label = generateCounterLabel(cat.counter);
       return `
@@ -82,9 +77,7 @@
       var componentString = createCatClickerComponent(cat);
 
       // Create particular `cat-clicker` element
-      var id = generateID(cat.name, 'display');
       var componentContainerEl = document.createElement('div');
-      componentContainerEl.setAttribute('id', id);
       componentContainerEl.innerHTML = componentString;
 
       // Add created particular `cat-clicker` to `app-container`
@@ -105,9 +98,7 @@
     catsStore.forEach((cat, index) => {
       // Create `CatTagName` element
       var catTagNameElString = createCatTagName(cat);
-      var id = generateID(cat.name, 'item');
       var componentContainerEl = document.createElement('li');
-      componentContainerEl.setAttribute('id', id);
       componentContainerEl.innerHTML = catTagNameElString;
 
       // Add element to `list container`
