@@ -7,7 +7,9 @@
   <title>Cat Clicker</title>
 </head>
 <body>
-  <div id="app-container"></div>
+  <div id="display-area-container"></div>
+  <h3>Cats List</h3>
+  <ul id="cats-list-container"></ul>
 
   <script>
     var cats = [
@@ -18,14 +20,24 @@
       {
         name: 'Kitten',
         imageUrl: 'https://lh3.ggpht.com/nlI91wYNCrjjNy5f-S3CmVehIBM4cprx-JFWOztLk7vFlhYuFR6YnxcT446AvxYg4Ab7M1Fy0twaOCWYcUk=s0#w=640&h=426',
-      }
+      },
+      {
+        name: 'Duo Kitten',
+        imageUrl: 'https://lh5.ggpht.com/LfjkdmOKkGLvCt-VuRlWGjAjXqTBrPjRsokTNKBtCh8IFPRetGaXIpTQGE2e7ZCUaG2azKNkz38KkbM_emA=s0#w=640&h=454',
+      },
     ];
     
+    // Create `store` for storing cats click counter
     var catsStore = cats.map((cat) => ({
       name: cat.name,
       imageUrl: cat.imageUrl,
       counter: 0,
     }));
+
+    var selectedCatStoreIndex = catsStore.length ? 0 : -1;
+
+    var displayAreaEl = document.getElementById('display-area-container');
+    var listEl = document.getElementById('cats-list-container');
 
     function generateCounterLabel(counter) {
       var label = counter > 1 ? 'Clicks' : 'Click';
@@ -52,10 +64,20 @@
       `;
     }
 
-    var appContainerEl = document.getElementById('app-container');
-    
-    // Initialize `cat-clicker` components
-    catsStore.forEach((cat) => {
+    function createCatTagName(cat) {
+      return `
+        <p>${cat.name}</p>
+      `;
+    }
+
+    function updateDisplayArea() {
+      // Clear all child elements in `displayAreaEl`
+      while (displayAreaEl.firstChild) {
+        displayAreaEl.removeChild(displayAreaEl.firstChild);
+      }
+
+      var cat = catsStore[selectedCatStoreIndex];
+
       // Create particular `cat-clicker` string
       var componentString = createCatClickerComponent(cat);
 
@@ -66,16 +88,20 @@
       componentContainerEl.innerHTML = componentString;
 
       // Add created particular `cat-clicker` to `app-container`
-      appContainerEl.appendChild(componentContainerEl);
+      displayAreaEl.appendChild(componentContainerEl);
 
       var trigger = componentContainerEl.getElementsByClassName('trigger')[0];
       var counter = componentContainerEl.getElementsByClassName('counter')[0];
+      
       // Add event listener for `click`
       trigger.addEventListener('click', () => {
         cat.counter++;
         counter.textContent = generateCounterLabel(cat.counter);
       });
-    });
+    }
+
+    updateDisplayArea();
+
   </script>
 </body>
 </html>
