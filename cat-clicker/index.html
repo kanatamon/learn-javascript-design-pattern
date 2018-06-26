@@ -82,7 +82,7 @@
       var componentString = createCatClickerComponent(cat);
 
       // Create particular `cat-clicker` element
-      var id = generateID(cat.name, 'container');
+      var id = generateID(cat.name, 'display');
       var componentContainerEl = document.createElement('div');
       componentContainerEl.setAttribute('id', id);
       componentContainerEl.innerHTML = componentString;
@@ -101,6 +101,16 @@
     }
 
     updateDisplayArea();
+
+    catsStore.forEach(cat => {
+      var catTagNameElString = createCatTagName(cat);
+      var id = generateID(cat.name, 'item');
+      var componentContainerEl = document.createElement('li');
+      componentContainerEl.setAttribute('id', id);
+      componentContainerEl.innerHTML = catTagNameElString;
+
+      listEl.appendChild(componentContainerEl);
+    });
 
   </script>
 </body>
