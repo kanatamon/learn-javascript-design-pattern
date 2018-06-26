@@ -57,8 +57,8 @@
           class="trigger"
           src="${cat.imageUrl}"
           alt="${cat.name}"
-          width="320px"
-          height="auto"
+          width="auto"
+          height="320px"
         >
         <div class="counter">${label}</div>
       `;
@@ -103,14 +103,18 @@
     updateDisplayArea();
 
     catsStore.forEach((cat, index) => {
+      // Create `CatTagName` element
       var catTagNameElString = createCatTagName(cat);
       var id = generateID(cat.name, 'item');
       var componentContainerEl = document.createElement('li');
       componentContainerEl.setAttribute('id', id);
       componentContainerEl.innerHTML = catTagNameElString;
 
+      // Add element to `list container`
       listEl.appendChild(componentContainerEl);
 
+      // Add interaction when cat is clicked, the cat in display will be updated
+      // to show the data for selected cat 
       componentContainerEl.addEventListener('click', () => {
         selectedCatStoreIndex = index;
         updateDisplayArea();
