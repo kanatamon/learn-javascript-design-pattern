@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Closures and Event Listeners</title>
+</head>
+<body>
+  <script> 
+    // clear the screen for testing
+    document.body.innerHTML = '';
+    document.body.style.background="white";
+
+    var nums = [1,2,3];
+
+    // Let's loop over the numbers in our array
+    for (var i = 0; i < nums.length; i++) {
+
+      // This is the number we're on...
+      var num = nums[i];
+
+      // We're creating a DOM element for the number
+      var elem = document.createElement('div');
+      elem.textContent = num;
+
+      // ... and when we click, alert the value of `num`
+      // `num` is defined outside of `click-event-handler` function
+      // each of click-event-handler` functions are pointing to the 
+      // same `num` which changes on each iternation and which
+      // equal to 3 at the end of the iteration
+      // ... so regardles of which number is clicked 
+      // ,they all alert the last value of `num` which is 3.
+      
+      // elem.addEventListener('click', function() {
+      //   alert(num);
+      // });
+
+      // so we fix th closures problem by passing `num` to 
+      // `click-event-handler` which now instead of being a function
+      // it is replaced by IIFE(Immediately-Invoked Function Expression, pronounced like "iffy")
+      // then create a function which `alert(numCopy)` will be invoked
+      // where `num` of each iteration will be stored in `numCopy`
+      elem.addEventListener('click', (function(numCopy) {
+          return function() {
+            alert(numCopy);
+          };
+      })(num));
+
+      // finally, let's add this element to the document
+      document.body.appendChild(elem);
+    };
+  </script>
+</body>
+</html>
