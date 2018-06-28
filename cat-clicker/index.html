@@ -30,35 +30,37 @@
           imageUrl: 'https://lh5.ggpht.com/LfjkdmOKkGLvCt-VuRlWGjAjXqTBrPjRsokTNKBtCh8IFPRetGaXIpTQGE2e7ZCUaG2azKNkz38KkbM_emA=s0#w=640&h=454',
           clickCount: 0,
         },
-      ],
-      selectedCatIndex: 0,
+      ]
     };
     
     var octopus = {
-      getAllCats: function() { 
-        return data.cats;
-      },
-      updateSelectedCat: (index) => {
-        data.selectedCatIndex = index;
-        displayAreaView.render();
-      },
       init: function() {
+        this.selectedCat = data.cats[0];
         catsListView.init();
         displayAreaView.init();
       },
+      getAllCats: function() { 
+        return data.cats;
+      },
+      setSelectedCat: function(cat) {
+        this.selectedCat = cat;
+        displayAreaView.render();
+      },
       getSelectedCat: function() {
-        return data.cats[data.selectedCatIndex];
+        return this.selectedCat;
       },
       increaseClickCountOnSelectedCat: function(increment) {
-        var selectedCat = this.getSelectedCat();
-        selectedCat.clickCount = selectedCat.clickCount + increment;
+        this.selectedCat.clickCount += increment;
         displayAreaView.render();
       }
     };
 
     var catsListView = {
       render: function() {
-        octopus.getAllCats().forEach((cat, index) => {
+        // Remove whole item in list
+        this.listContainerEl.innerHTML = '';
+
+        octopus.getAllCats().forEach(cat => {
           // Create `CatTagName` element
           var catTagNameEl = document.createElement('li');
           catTagNameEl.textContent = cat.name;
@@ -69,7 +71,7 @@
           // Add interaction when cat is clicked, the cat in display will be updated
           // to show the data for selected cat 
           catTagNameEl.addEventListener('click', () => {
-            octopus.updateSelectedCat(index)
+             octopus.setSelectedCat(cat);
           });
         });
       },
@@ -82,7 +84,6 @@
     var displayAreaView = {
       render: function() {
         var selectedCat = octopus.getSelectedCat();
-
         // Clear all child elements in `displayAreaEl`
         this.displayAreaEl.innerHTML = '';
 
