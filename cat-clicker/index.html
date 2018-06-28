@@ -13,15 +13,15 @@
     <form id="admin-form">
       <div>
         <label for="name">Name</label>
-        <input type="text" name="name">
+        <input type="text" id="name" name="name">
       </div>
       <div>
         <label for="image-url">Image URL</label>
-        <input type="text" name="image-url">
+        <input type="text" id="image-url" name="image-url">
       </div>
       <div>
         <label for="click-count">Click Count</label>
-        <input type="number" name="click-count">
+        <input type="number" id="click-count" name="click-count">
       </div>
       <button class="cancle-button">Cancle</button>
       <button class="save-button">Save</button>
@@ -148,6 +148,9 @@
       init: function() {
         this.adminButton = document.getElementById('admin-button');
         this.adminForm = document.getElementById('admin-form');
+        this.inputName = document.getElementById('name');
+        this.inputImageUrl = document.getElementById('image-url');
+        this.inputClickCount = document.getElementById('click-count');
 
         this.adminButton.addEventListener('click', octopus.toggleAdminForm);
         this.render();
@@ -156,6 +159,12 @@
         this.adminForm.style = octopus.isAdminFormOpened()
           ? 'display: block;'
           : 'display: none;';
+        
+        var selectedCat = octopus.getSelectedCat();
+
+        this.inputName.value = selectedCat.name;
+        this.inputImageUrl.value = selectedCat.imageUrl;
+        this.inputClickCount.value = selectedCat.clickCount;
       },
     };
 
