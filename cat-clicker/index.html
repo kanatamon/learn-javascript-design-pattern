@@ -44,7 +44,16 @@
       },
       init: function() {
         catsListView.init();
+        displayAreaView.init();
       },
+      getSelectedCat: function() {
+        return data.cats[data.selectedCatIndex];
+      },
+      increaseClickCountOnSelectedCat: function(increment) {
+        var selectedCat = this.getSelectedCat();
+        selectedCat.clickCount = selectedCat.clickCount + increment;
+        displayAreaView.render();
+      }
     };
 
     var catsListView = {
@@ -70,57 +79,45 @@
       },
     };
 
+    var displayAreaView = {
+      render: function() {
+        var selectedCat = octopus.getSelectedCat();
+
+        // Clear all child elements in `displayAreaEl`
+        this.displayAreaEl.innerHTML = '';
+
+        // Create particular `cat-clicker` string
+        var catClicker = `
+          <h3>${selectedCat.name}</h3>
+          <img
+            class="trigger"
+            src="${selectedCat.imageUrl}"
+            alt="${selectedCat.name}"
+            width="auto"
+            height="320px"
+          >
+          <div class="counter">Clicks: ${selectedCat.clickCount}</div>
+        `;
+
+        // Add created particular `cat-clicker` to `app-container`
+        this.displayAreaEl.innerHTML = catClicker;
+
+        var trigger = this.displayAreaEl.getElementsByClassName('trigger')[0];
+        
+        // Add event listener for `click`
+        trigger.addEventListener('click', () => {
+          octopus.increaseClickCountOnSelectedCat(1);
+        });
+      },
+      init: function() {
+        this.displayAreaEl = document.getElementById('display-area-container');
+        this.render();
+      }
+    };
+
+    // Start `cat-clicker-premium`
     octopus.init();
 
-    var displayAreaEl = document.getElementById('display-area-container');
-
-    function generateCounterLabel(counter) {
-      var label = counter > 1 ? 'Clicks' : 'Click';
-      return label + ': ' + counter;
-    }
-
-    function createCatClickerComponent(cat) {
-      var label = generateCounterLabel(cat.counter);
-      return `
-        <h3>${cat.name}</h3>
-        <img
-          class="trigger"
-          src="${cat.imageUrl}"
-          alt="${cat.name}"
-          width="auto"
-          height="320px"
-        >
-        <div class="counter">${label}</div>
-      `;
-    }
-
-    function updateDisplayArea() {
-      // Clear all child elements in `displayAreaEl`
-      while (displayAreaEl.firstChild) {
-        displayAreaEl.removeChild(displayAreaEl.firstChild);
-      }
-
-      var cat = catsStore[selectedCatStoreIndex];
-
-      // Create particular `cat-clicker` string
-      var componentString = createCatClickerComponent(cat);
-
-      // Create particular `cat-clicker` element
-      var componentContainerEl = document.createElement('div');
-      componentContainerEl.innerHTML = componentString;
-
-      // Add created particular `cat-clicker` to `app-container`
-      displayAreaEl.appendChild(componentContainerEl);
-
-      var trigger = componentContainerEl.getElementsByClassName('trigger')[0];
-      var counter = componentContainerEl.getElementsByClassName('counter')[0];
-      
-      // Add event listener for `click`
-      trigger.addEventListener('click', () => {
-        cat.counter++;
-        counter.textContent = generateCounterLabel(cat.counter);
-      });
-    }
   })();
 
   </script>
