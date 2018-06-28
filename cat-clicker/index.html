@@ -8,6 +8,25 @@
 </head>
 <body>
   <div id="display-area-container"></div>
+  <di>
+    <button id="admin-button">Admin</button>
+    <form id="admin-form">
+      <div>
+        <label for="name">Name</label>
+        <input type="text" name="name">
+      </div>
+      <div>
+        <label for="image-url">Image URL</label>
+        <input type="text" name="image-url">
+      </div>
+      <div>
+        <label for="click-count">Click Count</label>
+        <input type="number" name="click-count">
+      </div>
+      <button class="cancle-button">Cancle</button>
+      <button class="save-button">Save</button>
+    </form>
+  </div>
   <h3>Cats List</h3>
   <ul id="cats-list-container"></ul>
 
@@ -30,7 +49,8 @@
           imageUrl: 'https://lh5.ggpht.com/LfjkdmOKkGLvCt-VuRlWGjAjXqTBrPjRsokTNKBtCh8IFPRetGaXIpTQGE2e7ZCUaG2azKNkz38KkbM_emA=s0#w=640&h=454',
           clickCount: 0,
         },
-      ]
+      ],
+      isAdminFormOpened: false,
     };
     
     var octopus = {
@@ -38,6 +58,7 @@
         this.selectedCat = data.cats[0];
         catsListView.init();
         displayAreaView.init();
+        adminAreaView.init();
       },
       getAllCats: function() { 
         return data.cats;
@@ -52,7 +73,14 @@
       increaseClickCountOnSelectedCat: function(increment) {
         this.selectedCat.clickCount += increment;
         displayAreaView.render();
-      }
+      },
+      isAdminFormOpened: function() {
+        return data.isAdminFormOpened;
+      },
+      toggleAdminForm: function() {
+        data.isAdminFormOpened = !data.isAdminFormOpened;
+        adminAreaView.render();
+      },
     };
 
     var catsListView = {
@@ -114,6 +142,21 @@
         this.displayAreaEl = document.getElementById('display-area-container');
         this.render();
       }
+    };
+
+    var adminAreaView = {
+      init: function() {
+        this.adminButton = document.getElementById('admin-button');
+        this.adminForm = document.getElementById('admin-form');
+
+        this.adminButton.addEventListener('click', octopus.toggleAdminForm);
+        this.render();
+      },
+      render: function() {
+        this.adminForm.style = octopus.isAdminFormOpened()
+          ? 'display: block;'
+          : 'display: none;';
+      },
     };
 
     // Start `cat-clicker-premium`
