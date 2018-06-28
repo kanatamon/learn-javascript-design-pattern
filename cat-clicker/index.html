@@ -12,32 +12,67 @@
   <ul id="cats-list-container"></ul>
 
   <script>
-    var cats = [
-      {
-        name: 'Blue Eye',
-        imageUrl: 'https://lh3.ggpht.com/kixazxoJ2ufl3ACj2I85Xsy-Rfog97BM75ZiLaX02KgeYramAEqlEHqPC3rKqdQj4C1VFnXXryadFs1J9A=s0#w=640&h=496',
-      },
-      {
-        name: 'Kitten',
-        imageUrl: 'https://lh3.ggpht.com/nlI91wYNCrjjNy5f-S3CmVehIBM4cprx-JFWOztLk7vFlhYuFR6YnxcT446AvxYg4Ab7M1Fy0twaOCWYcUk=s0#w=640&h=426',
-      },
-      {
-        name: 'Duo Kitten',
-        imageUrl: 'https://lh5.ggpht.com/LfjkdmOKkGLvCt-VuRlWGjAjXqTBrPjRsokTNKBtCh8IFPRetGaXIpTQGE2e7ZCUaG2azKNkz38KkbM_emA=s0#w=640&h=454',
-      },
-    ];
+  (function() {
+    var data = {
+      cats: [
+        {
+          name: 'Blue Eye',
+          imageUrl: 'https://lh3.ggpht.com/kixazxoJ2ufl3ACj2I85Xsy-Rfog97BM75ZiLaX02KgeYramAEqlEHqPC3rKqdQj4C1VFnXXryadFs1J9A=s0#w=640&h=496',
+          clickCount: 0,
+        },
+        {
+          name: 'Kitten',
+          imageUrl: 'https://lh3.ggpht.com/nlI91wYNCrjjNy5f-S3CmVehIBM4cprx-JFWOztLk7vFlhYuFR6YnxcT446AvxYg4Ab7M1Fy0twaOCWYcUk=s0#w=640&h=426',
+          clickCount: 0,
+        },
+        {
+          name: 'Duo Kitten',
+          imageUrl: 'https://lh5.ggpht.com/LfjkdmOKkGLvCt-VuRlWGjAjXqTBrPjRsokTNKBtCh8IFPRetGaXIpTQGE2e7ZCUaG2azKNkz38KkbM_emA=s0#w=640&h=454',
+          clickCount: 0,
+        },
+      ],
+      selectedCatIndex: 0,
+    };
     
-    // Create `store` for storing cats click counter
-    var catsStore = cats.map(cat => ({
-      name: cat.name,
-      imageUrl: cat.imageUrl,
-      counter: 0,
-    }));
+    var octopus = {
+      getAllCats: function() { 
+        return data.cats;
+      },
+      updateSelectedCat: (index) => {
+        data.selectedCatIndex = index;
+        displayAreaView.render();
+      },
+      init: function() {
+        catsListView.init();
+      },
+    };
 
-    var selectedCatStoreIndex = catsStore.length ? 0 : -1;
+    var catsListView = {
+      render: function() {
+        octopus.getAllCats().forEach((cat, index) => {
+          // Create `CatTagName` element
+          var catTagNameEl = document.createElement('li');
+          catTagNameEl.textContent = cat.name;
+
+          // Add element to `list container`
+          this.listContainerEl.appendChild(catTagNameEl);
+
+          // Add interaction when cat is clicked, the cat in display will be updated
+          // to show the data for selected cat 
+          catTagNameEl.addEventListener('click', () => {
+            octopus.updateSelectedCat(index)
+          });
+        });
+      },
+      init: function() {
+        this.listContainerEl = document.getElementById('cats-list-container');
+        this.render();
+      },
+    };
+
+    octopus.init();
 
     var displayAreaEl = document.getElementById('display-area-container');
-    var listEl = document.getElementById('cats-list-container');
 
     function generateCounterLabel(counter) {
       var label = counter > 1 ? 'Clicks' : 'Click';
@@ -56,12 +91,6 @@
           height="320px"
         >
         <div class="counter">${label}</div>
-      `;
-    }
-
-    function createCatTagName(cat) {
-      return `
-        <p>${cat.name}</p>
       `;
     }
 
@@ -92,25 +121,7 @@
         counter.textContent = generateCounterLabel(cat.counter);
       });
     }
-
-    updateDisplayArea();
-
-    catsStore.forEach((cat, index) => {
-      // Create `CatTagName` element
-      var catTagNameElString = createCatTagName(cat);
-      var componentContainerEl = document.createElement('li');
-      componentContainerEl.innerHTML = catTagNameElString;
-
-      // Add element to `list container`
-      listEl.appendChild(componentContainerEl);
-
-      // Add interaction when cat is clicked, the cat in display will be updated
-      // to show the data for selected cat 
-      componentContainerEl.addEventListener('click', () => {
-        selectedCatStoreIndex = index;
-        updateDisplayArea();
-      });
-    });
+  })();
 
   </script>
 </body>
