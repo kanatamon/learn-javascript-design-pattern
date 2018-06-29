@@ -81,6 +81,17 @@
         data.isAdminFormOpened = !data.isAdminFormOpened;
         adminAreaView.render();
       },
+      setIsAdminFormOpened: function(isOpended) {
+        data.isAdminFormOpened = isOpended;
+        adminAreaView.render();
+      },
+      setSelectedCatProperties: function(properties) {
+        Object.assign(this.selectedCat, properties);
+        data.isAdminFormOpened = false;
+        catsListView.render();
+        displayAreaView.render();
+        adminAreaView.render();
+      },
     };
 
     var catsListView = {
@@ -151,8 +162,24 @@
         this.inputName = document.getElementById('name');
         this.inputImageUrl = document.getElementById('image-url');
         this.inputClickCount = document.getElementById('click-count');
-
-        this.adminButton.addEventListener('click', octopus.toggleAdminForm);
+        this.saveButton = this.adminForm.getElementsByClassName('save-button')[0];
+        this.cancleButton = this.adminForm.getElementsByClassName('cancle-button')[0];
+        
+        this.adminButton.addEventListener('click', () =>
+          octopus.setIsAdminFormOpened(true));
+        this.cancleButton.addEventListener('click', e => {
+          octopus.setIsAdminFormOpened(false);
+          e.preventDefault();
+        });
+        this.saveButton.addEventListener('click', e => {
+          var properties = {
+            name: this.inputName.value,
+            imageUrl: this.inputImageUrl.value,
+            clickCount: this.inputClickCount.value,
+          };
+          octopus.setSelectedCatProperties(properties);
+          e.preventDefault();
+        });
         this.render();
       },
       render: function() {
