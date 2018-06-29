@@ -30,6 +30,9 @@
 			}
 			return JSON.parse(localStorage.attendances);
 		},
+		saveAttendances: function(attendances) {
+			localStorage.attendances = JSON.stringify(attendances);
+		},
 	};
 
 	var octopus = {
@@ -38,6 +41,13 @@
 		},
 		getAllAttendances: function() {
 			return model.getAllAttendances();
+		},
+		checkAttendance: function(attendance, dayIndex, newValue) {
+			var attendances = model.getAllAttendances();
+			var targetAttendance = attendances.find(x => x.name === attendance.name);
+			targetAttendance.days[dayIndex] = newValue;
+			model.saveAttendances(attendances);
+			attendanceView.render();
 		},
 	};
 
@@ -57,13 +67,17 @@
 				tdName.textContent = attendance.name;
 				tr.appendChild(tdName);
 
-				var tdDays = attendance.days.map(isAttendanced => {
+				var tdDays = attendance.days.map((isAttendanced, dayIndex) => {
 					var tdDay = document.createElement('td');
 					tdDay.setAttribute('class', 'attend-col');
 
 					var input = document.createElement('input');
 					input.setAttribute('type', 'checkbox');
 					input.checked = isAttendanced;
+					input.addEventListener('change', event => {
+						var newValue = event.currentTarget.checked;
+						octopus.checkAttendance(attendance, dayIndex, newValue);
+					});
 
 					tdDay.appendChild(input);
 					tr.appendChild(tdDay);
