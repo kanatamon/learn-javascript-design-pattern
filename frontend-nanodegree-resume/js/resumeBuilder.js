@@ -16,12 +16,19 @@
       'ไทย',
       '日本語',
     ],
-    biopic: '../images/fry.jpg',
+    biopic: 'images/fry.jpg',
   };
 
   var bioController = {
     getName: function() { return bioModel.name; },
     getRole: function() { return bioModel.role; },
+    getMobile: function() { return bioModel.contacts.mobile; },
+    getEmail: function() { return bioModel.contacts.email; },
+    getGithub: function() { return bioModel.contacts.github; },
+    getLocation: function() { return bioModel.contacts.location; },
+    getImageUrl: function() { return bioModel.biopic; },
+    getWelcomeMsg: function() { return bioModel.welcomMessage; },
+    getSkills: function() { return bioModel.skills; },
     init: function() {
       bioView.init();
     },
@@ -30,6 +37,7 @@
   var bioView = {
     init: function() {
       this.headerContainer = document.getElementById('header');
+      this.topContacts = document.getElementById('topContacts');
       this.render();
     },
     render: function() {
@@ -37,11 +45,41 @@
         HTMLheaderName.replace(/%data%/, bioController.getName()),
         HTMLheaderRole.replace(/%data%/, bioController.getRole()),
       ];
-
-      this.headerContainer.innerHTML = headerElements.reduce(
+      var HTMLheaderElements = headerElements.reduce(
         (done, element) => done + element,
         ''
       );
+      this.headerContainer.insertAdjacentHTML('afterbegin', HTMLheaderElements);
+      
+      var topContactsElements = [
+        HTMLmobile.replace(/%data%/, bioController.getMobile()),
+        HTMLemail.replace(/%data%/, bioController.getEmail()),
+        HTMLgithub.replace(/%data%/, bioController.getGithub()),
+        HTMLlocation.replace(/%data%/, bioController.getLocation()),
+      ];
+      var HTMLtopContactsElements = topContactsElements.reduce(
+        (done, element) => done + element,
+        ''
+      );
+      this.topContacts.insertAdjacentHTML('afterbegin', HTMLtopContactsElements);
+
+      var skillElements = bioController.getSkills()
+        .map(skill => HTMLskills.replace(/%data%/, skill));
+      var HTMLskillElements = skillElements.reduce(
+        (done, element) => done + element,
+        ''
+      );
+      var infoElements = [
+        HTMLbioPic.replace(/%data%/, bioController.getImageUrl()),
+        HTMLwelcomeMsg.replace(/%data%/, bioController.getWelcomeMsg()),
+        HTMLskillsStart.replace(/%data%/, HTMLskillElements),
+      ];
+      var HTMLinfoElements = infoElements.reduce(
+        (done, element) => done + element,
+        ''
+      );
+      this.headerContainer.insertAdjacentHTML('beforeend', HTMLinfoElements);
+
     },
   };
 
