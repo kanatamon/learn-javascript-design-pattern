@@ -60,7 +60,7 @@
     },
     renderInfo: function() {
       var skillElements = bioController.getSkills()
-      .map(skill => HTMLskills.replace(/%data%/, skill));
+        .map(skill => HTMLskills.replace(/%data%/, skill));
       var HTMLskillElements = concatStrings(skillElements);
       var infoElements = [
         HTMLbioPic.replace(/%data%/, bioController.getImageUrl()),
@@ -78,4 +78,57 @@
   };
 
   bioController.init();
+})();
+
+(function() {
+  var workModel = {
+    jobs: [
+      {
+        employer: 'Registration Office, Chiang Mai University',
+        title: 'Developer',
+        location: 'Chiang Mai, Thailand',
+        date: '2016 - 2018',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.'
+      },
+      {
+        employer: 'Skodio',
+        title: 'Fullstack Developer',
+        location: 'Bankong, Thailand',
+        date: 'in progress',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.'
+      },
+    ],
+  };
+
+  var workController = {
+    getJobs: function() { return workModel.jobs; },
+    init: function() {
+      workView.init();
+    },
+  };
+
+  var workView = {
+    init: function() {
+      this.workExperienceContainer = document.getElementById('workExperience');
+      this.render();
+    },
+    render: function() {
+      var jobElements = workController.getJobs()
+        .map(job => {
+          var workElements = [
+            HTMLworkEmployer.replace(/%data%/, job.employer) +
+            HTMLworkTitle.replace(/%data%/, job.title),
+            HTMLworkDates.replace(/%data%/, job.date),
+            HTMLworkLocation.replace(/%data%/, job.location),
+            HTMLworkDescription.replace(/%data%/, job.description),
+          ];
+          
+          var HTMLworkElements = concatStrings(workElements);
+          var HTMLworkStartElement = HTMLworkStart.replace(/%data%/, HTMLworkElements);
+          this.workExperienceContainer.insertAdjacentHTML('beforeend', HTMLworkStartElement);
+        });  
+    },
+  };
+
+  workController.init();
 })();
