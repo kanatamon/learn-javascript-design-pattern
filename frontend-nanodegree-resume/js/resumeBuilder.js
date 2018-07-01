@@ -40,46 +40,40 @@
       this.topContacts = document.getElementById('topContacts');
       this.render();
     },
-    render: function() {
+    renderHeader: function() {
       var headerElements = [
         HTMLheaderName.replace(/%data%/, bioController.getName()),
         HTMLheaderRole.replace(/%data%/, bioController.getRole()),
       ];
-      var HTMLheaderElements = headerElements.reduce(
-        (done, element) => done + element,
-        ''
-      );
+      var HTMLheaderElements = concatStrings(headerElements);
       this.headerContainer.insertAdjacentHTML('afterbegin', HTMLheaderElements);
-      
+    },
+    renderTopContacts: function() {
       var topContactsElements = [
         HTMLmobile.replace(/%data%/, bioController.getMobile()),
         HTMLemail.replace(/%data%/, bioController.getEmail()),
         HTMLgithub.replace(/%data%/, bioController.getGithub()),
         HTMLlocation.replace(/%data%/, bioController.getLocation()),
       ];
-      var HTMLtopContactsElements = topContactsElements.reduce(
-        (done, element) => done + element,
-        ''
-      );
+      var HTMLtopContactsElements = concatStrings(topContactsElements)
       this.topContacts.insertAdjacentHTML('afterbegin', HTMLtopContactsElements);
-
+    },
+    renderInfo: function() {
       var skillElements = bioController.getSkills()
-        .map(skill => HTMLskills.replace(/%data%/, skill));
-      var HTMLskillElements = skillElements.reduce(
-        (done, element) => done + element,
-        ''
-      );
+      .map(skill => HTMLskills.replace(/%data%/, skill));
+      var HTMLskillElements = concatStrings(skillElements);
       var infoElements = [
         HTMLbioPic.replace(/%data%/, bioController.getImageUrl()),
         HTMLwelcomeMsg.replace(/%data%/, bioController.getWelcomeMsg()),
         HTMLskillsStart.replace(/%data%/, HTMLskillElements),
       ];
-      var HTMLinfoElements = infoElements.reduce(
-        (done, element) => done + element,
-        ''
-      );
+      var HTMLinfoElements = concatStrings(infoElements);
       this.headerContainer.insertAdjacentHTML('beforeend', HTMLinfoElements);
-
+    },
+    render: function() {
+      this.renderHeader();
+      this.renderTopContacts();
+      this.renderInfo();      
     },
   };
 
